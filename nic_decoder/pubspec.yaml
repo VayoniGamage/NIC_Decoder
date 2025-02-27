@@ -1,17 +1,26 @@
 name: nic_decoder
-description: A Flutter app to decode Sri Lankan NIC numbers.
-publish_to: 'none'
+description: A Flutter application to decode Sri Lankan National Identity Card (NIC).
+publish_to: 'none' 
+
+version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.6
+  get: ^4.6.5
+  intl: ^0.18.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
+
   assets:
-    - NIC_Decoder\nic_decoder\assets\sri_lanka_emblem.png
+    - assets/sri_lanka_emblem.png
 
