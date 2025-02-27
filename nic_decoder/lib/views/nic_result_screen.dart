@@ -3,41 +3,54 @@ import 'package:get/get.dart';
 import '../controllers/nic_controller.dart';
 
 class NICResultScreen extends StatelessWidget {
-  final NICController controller = Get.find();
+  final NICController controller = Get.find<NICController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFCCDBDC), // Light Teal Background
       appBar: AppBar(
-        backgroundColor: Color(0xFF003249), // Deep Navy Header
-        title: Text(
+        backgroundColor: const Color(0xFF003249), // Deep Navy
+        title: const Text(
           'NIC DECODER',
-          style: TextStyle(color: Color(0xFFE7C582), fontWeight: FontWeight.bold), // Warm Gold Text
+          style: TextStyle(color: Color(0xFFE7C582), fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("NIC Details", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+
+            _infoTile("Date of Birth (Year)", controller.birthYear),
+            _infoTile("Date of Birth (Date)", controller.birthDate),
+            _infoTile("Date of Birth (Day)", controller.birthDay),
+            _infoTile("Age", controller.age),
+            _infoTile("Gender", controller.gender),
+
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => Get.back(),
+              child: const Text("Regenerate"),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: const Color(0xFF003249), // Footer color
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _buildInfoBox('NIC Details'),
-              _buildInfoBox('Date of Birth: Year ${controller.birthYear}'),
-              _buildInfoBox('Date of Birth: Date ${controller.birthDate}'),
-              _buildInfoBox('Date of Birth: Day ${controller.weekDay}'),
-              _buildInfoBox('Age: ${controller.age}'),
-              _buildInfoBox('Gender: ${controller.gender}'),
-              SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF567485), // Muted Blue-Gray Button
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                ),
-                onPressed: () => Get.back(),
-                child: Text('Regenerate', style: TextStyle(color: Colors.white)),
-              ),
+              Icon(Icons.circle, size: 8, color: Colors.black),
+              SizedBox(width: 5),
+              Icon(Icons.circle, size: 8, color: Colors.black),
             ],
           ),
         ),
@@ -45,19 +58,13 @@ class NICResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoBox(String text) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.all(12),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Color(0xFF567485), // Muted Blue-Gray Info Boxes
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(color: Colors.white, fontSize: 16),
-      ),
-    );
+  Widget _infoTile(String label, RxString value) {
+    return Obx(() => Card(
+          child: ListTile(
+            title: Text(label),
+            subtitle: Text(value.value),
+          ),
+        ));
   }
 }
+
