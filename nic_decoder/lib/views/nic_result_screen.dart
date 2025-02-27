@@ -12,7 +12,7 @@ class NICResultScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF003249), // Deep Navy
         title: const Text(
           'NIC DECODER',
-          style: TextStyle(color: Color(0xFFE7C582), fontWeight: FontWeight.bold),
+          style: TextStyle(color: Color(0xFFE7C582),fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -21,14 +21,14 @@ class NICResultScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("YOUR NIC DETAILS", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
+            const Text("YOUR NIC DETAILS", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 15),
 
-            _infoTile("Date of Birth (Year)", controller.birthYear),
-            _infoTile("Date of Birth (Date)", controller.birthDate),
-            _infoTile("Date of Birth (Day)", controller.birthDay),
-            _infoTile("Age", controller.age),
-            _infoTile("Gender", controller.gender),
+            _infoTile("1.) Your Date of Birth (Year) :", controller.birthYear),
+            _infoTile("2.) Your Date of Birth (Date) :", controller.birthDate),
+            _infoTile("3.) Your Date of Birth (Day) :", controller.birthDay),
+            _infoTile("4.) Your Age :", controller.age),
+            _infoTile("5.) Your Gender :", controller.gender),
 
             const SizedBox(height: 20),
             ElevatedButton(
@@ -59,12 +59,39 @@ class NICResultScreen extends StatelessWidget {
   }
 
   Widget _infoTile(String label, RxString value) {
-    return Obx(() => Card(
-          child: ListTile(
-            title: Text(label),
-            subtitle: Text(value.value),
-          ),
-        ));
-  }
+  return Obx(() => Container(
+        width: double.infinity, // Makes it full width
+        margin: EdgeInsets.symmetric(vertical: 6), // Adds spacing between tiles
+        decoration: BoxDecoration(
+          color: Colors.white, // Background color
+          borderRadius: BorderRadius.circular(20), // Fully rounded corners
+          border: Border.all(color: Color(0xFF003249), width: 2), // Border color
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26, // Soft shadow
+              blurRadius: 6, // Increases blur effect
+              offset: Offset(2, 4), // Moves shadow slightly
+            ),
+          ],
+        ),
+        padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16), // Box padding
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87),
+            ),
+            SizedBox(height: 4), // Spacing between title & value
+            Text(
+              value.value,
+              style: const TextStyle(fontSize: 18, color: Color.fromARGB(155, 0, 0, 0)),
+            ),
+          ],
+        ),
+      ));
+}
+
 }
 
