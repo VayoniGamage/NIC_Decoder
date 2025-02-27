@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:nic_decoder/views/nic_input_screen.dart';
+import 'views/nic_input_screen.dart';
+import 'theme.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "NIC Decoder",
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'NIC Decoder',
+      theme: appTheme,
       home: NicInputScreen(),
     );
   }
