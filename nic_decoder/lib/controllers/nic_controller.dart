@@ -1,59 +1,68 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:nic_decoder/views/nic_result_screen.dart';
 
 class NICController extends GetxController {
-  var nic = ''.obs;
+  var nicNumber = ''.obs;
   var birthYear = ''.obs;
   var birthDate = ''.obs;
-  var weekDay = ''.obs;
+  var birthDay = ''.obs;
   var age = ''.obs;
   var gender = ''.obs;
-  var voteAbility = ''.obs;
+  var isValidNIC = false.obs;
 
-  void decodeNIC(String nicInput) {
-    nic.value = nicInput;
+  get nicInputController => null;
+
+  void decodeNIC(String nic) {
+    nicNumber.value = nic.trim();
     
-    if (nicInput.length == 10) {
-      birthYear.value = '19' + nicInput.substring(0, 2);
-      int dayOfYear = int.parse(nicInput.substring(2, 5));
-      voteAbility.value = nicInput[9].toUpperCase();
-
-      if (dayOfYear > 500) {
-        gender.value = 'Female';
-        dayOfYear -= 500;
-      } else {
-        gender.value = 'Male';
-      }
-      birthDate.value = getDateFromDayOfYear(int.parse(birthYear.value), dayOfYear);
-    } 
-    else if (nicInput.length == 12) {
-      birthYear.value = nicInput.substring(0, 4);
-      int dayOfYear = int.parse(nicInput.substring(4, 7));
-      voteAbility.value = 'N/A';
-
-      if (dayOfYear > 500) {
-        gender.value = 'Female';
-        dayOfYear -= 500;
-      } else {
-        gender.value = 'Male';
-      }
-      birthDate.value = getDateFromDayOfYear(int.parse(birthYear.value), dayOfYear);
-    } 
-    else {
-      Get.snackbar('Error', 'Invalid NIC format', snackPosition: SnackPosition.BOTTOM);
+    // Check if it's 9-digit old NIC or 12-digit new NIC
+    if (nic.length == 10 && RegExp(r'^\d{9}[VvXx]$').hasMatch(nic)) {
+      _decodeOldNIC(nic);
+    } else if (nic.length == 12 && RegExp(r'^\d{12}$').hasMatch(nic)) {
+      _decodeNewNIC(nic);
+    } else {
+      isValidNIC.value = false;
       return;
     }
 
-    DateTime birth = DateFormat('yyyy-MM-dd').parse(birthDate.value);
-    weekDay.value = DateFormat('EEEE').format(birth);
-    age.value = (DateTime.now().year - birth.year).toString();
-
-    Get.to(() => NICResultScreen());
+    isValidNIC.value = true;
   }
 
-  String getDateFromDayOfYear(int year, int day) {
-    DateTime date = DateTime(year).add(Duration(days: day - 1));
-    return DateFormat('yyyy-MM-dd').format(date);
+  void _decodeOldNIC(String nic) {
+    String yearPrefix = (nic[0] == '0') ? '19' : '19'; // Always 19XX
+    String year = yearPrefix + nic.substring(0, 2);
+    int days = int.parse(nic.substring(2, 5));
+
+    _processNICData(year, days);
   }
+
+  void _decodeNewNIC(String nic) {
+    String year = nic.substring(0, 4);
+    int days = int.parse(nic.substring(4, 7));
+
+    _processNICData(year, days);
+  }
+
+  void _processNICData(String year, int days) {
+    // Gender check: if days > 500, it's female (subtract 500)
+    String genderText = (days > 500) ? "Female" : "Male";
+    if (days > 500) days -= 500;
+
+    // Convert day of the year to actual date
+    DateTime dob = DateTime(int.parse(year), 1, 1).add(Duration(days: days - 1));
+    String formattedDate = DateFormat("yyyy-MM-dd").format(dob);
+    String weekDay = DateFormat("EEEE").format(dob);
+
+    // Calculate Age
+    int currentYear = DateTime.now().year;
+    int userAge = currentYear - int.parse(year);
+
+    // Update Variables
+    birthYear.value = year;
+    birthDate.value = formattedDate;
+    birthDay.value = weekDay;
+    gender.value = genderText;
+    age.value = userAge.toString();
+  }
+  
 }
