@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
-class AppColors {
-  static const Color background = Color(0xFFCCDBDC);
-  static const Color button = Color(0xFF567485);
-  static const Color accent = Color(0xFFE7C582);
-  static const Color text = Colors.black;
-  static const Color header = Color(0xFF007EA7);
-  static const Color navBar = Color(0xFF003249);
-}
+const Color backgroundColor = Color(0xFFCCDBDC);
+const Color buttonColor = Color(0xFF567485);
+const Color highlightColor = Color(0xFFE7C582);
+const Color textColor = Colors.black;
+const Color headerColor = Color(0xFF007EA7);
+const Color navBarColor = Color(0xFF003249);
+
+final ThemeData appTheme = ThemeData(
+  scaffoldBackgroundColor: backgroundColor,
+  primaryColor: headerColor,
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(color: textColor),
+    bodyMedium: TextStyle(color: textColor),
+  ),
+);
