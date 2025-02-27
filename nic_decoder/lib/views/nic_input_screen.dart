@@ -23,8 +23,8 @@ class NICInputScreen extends StatelessWidget {
   child: Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Image.asset('lib/assets/sri_lanka_emblem.png', height: 140), // Larger Logo
-      const SizedBox(height: 20),
+      Image.asset('lib/assets/sri_lanka_emblem.png', height: 150), // Larger Logo
+      const SizedBox(height: 25),
       const Text(
         "DETECT YOUR NIC HERE",
         style: TextStyle(
@@ -34,7 +34,7 @@ class NICInputScreen extends StatelessWidget {
         ),
         textAlign: TextAlign.center,
       ),
-      const SizedBox(height: 20),
+      const SizedBox(height: 30),
       TextField(
         controller: nicInputController,
         decoration: const InputDecoration(
