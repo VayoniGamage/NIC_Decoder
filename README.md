@@ -1,7 +1,5 @@
 # NIC Decoder App
 
-![NIC Decoder](assets/screenshot.png)
-
 A modern Flutter-based mobile application that decodes Sri Lankan NIC numbers and provides details like date of birth, age, gender, and more.
 
 ## 📌 Features
