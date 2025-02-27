@@ -24,11 +24,11 @@ class NICResultScreen extends StatelessWidget {
             const Text("YOUR NIC DETAILS", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
             const SizedBox(height: 15),
 
-            _infoTile("1.) Your Date of Birth (Year) :", controller.birthYear),
-            _infoTile("2.) Your Date of Birth (Date) :", controller.birthDate),
-            _infoTile("3.) Your Date of Birth (Day) :", controller.birthDay),
-            _infoTile("4.) Your Age :", controller.age),
-            _infoTile("5.) Your Gender :", controller.gender),
+            _infoTile("1.) Date of Birth (Year) :", controller.birthYear),
+            _infoTile("2.) Date of Birth (Date) :", controller.birthDate),
+            _infoTile("3.) Date of Birth (Day) :", controller.birthDay),
+            _infoTile("4.) Age :", controller.age),
+            _infoTile("5.) Gender :", controller.gender),
 
             const SizedBox(height: 20),
             ElevatedButton(
