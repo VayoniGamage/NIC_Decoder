@@ -21,7 +21,7 @@ class NICResultScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("NIC Details", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text("YOUR NIC DETAILS", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
 
             _infoTile("Date of Birth (Year)", controller.birthYear),
@@ -40,11 +40,11 @@ class NICResultScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Container(
         height: 50,
-        decoration: BoxDecoration(
-          color: const Color(0xFF003249), // Footer color
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+        decoration: const BoxDecoration(
+          color: Color(0xFF003249), // Footer color
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
         ),
-        child: Center(
+        child: const Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
