@@ -1,56 +1,59 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:nic_decoder/views/nic_result_screen.dart';
 
-class NicController extends GetxController {
-  var birthYear = "".obs;
-  var birthDate = "".obs;
-  var birthDay = "".obs;
-  var age = "".obs;
-  var gender = "".obs;
-  var canVote = "".obs;
+class NICController extends GetxController {
+  var nic = ''.obs;
+  var birthYear = ''.obs;
+  var birthDate = ''.obs;
+  var weekDay = ''.obs;
+  var age = ''.obs;
+  var gender = ''.obs;
+  var voteAbility = ''.obs;
 
-  void decodeNIC(String nic) {
-    if (nic.length == 10 || nic.length == 12) {
-      String year;
-      int dayOfYear;
-      
-      if (nic.length == 10) {
-        // Old NIC Format (e.g., 853400937V)
-        year = "19${nic.substring(0, 2)}";
-        dayOfYear = int.parse(nic.substring(2, 5));
-      } else {
-        // New NIC Format (e.g., 198534000937)
-        year = nic.substring(0, 4);
-        dayOfYear = int.parse(nic.substring(4, 7));
-      }
+  void decodeNIC(String nicInput) {
+    nic.value = nicInput;
+    
+    if (nicInput.length == 10) {
+      birthYear.value = '19' + nicInput.substring(0, 2);
+      int dayOfYear = int.parse(nicInput.substring(2, 5));
+      voteAbility.value = nicInput[9].toUpperCase();
 
-      // Determine gender
       if (dayOfYear > 500) {
+        gender.value = 'Female';
         dayOfYear -= 500;
-        gender.value = "Female";
       } else {
-        gender.value = "Male";
+        gender.value = 'Male';
       }
+      birthDate.value = getDateFromDayOfYear(int.parse(birthYear.value), dayOfYear);
+    } 
+    else if (nicInput.length == 12) {
+      birthYear.value = nicInput.substring(0, 4);
+      int dayOfYear = int.parse(nicInput.substring(4, 7));
+      voteAbility.value = 'N/A';
 
-      // Calculate birthdate
-      DateTime birthDateObj = DateTime(int.parse(year), 1, 1).add(Duration(days: dayOfYear - 1));
-      birthDate.value = DateFormat("MMMM dd").format(birthDateObj);
-      birthDay.value = DateFormat("EEEE").format(birthDateObj);
-      birthYear.value = year;
-
-      // Calculate age
-      DateTime now = DateTime.now();
-      age.value = (now.year - int.parse(year)).toString();
-
-      // Determine voting eligibility
-      canVote.value = nic.length == 10 ? (nic[9].toUpperCase() == "V" ? "Yes" : "No") : "Yes";
-    } else {
-      birthYear.value = "Invalid NIC";
-      birthDate.value = "";
-      birthDay.value = "";
-      age.value = "";
-      gender.value = "";
-      canVote.value = "";
+      if (dayOfYear > 500) {
+        gender.value = 'Female';
+        dayOfYear -= 500;
+      } else {
+        gender.value = 'Male';
+      }
+      birthDate.value = getDateFromDayOfYear(int.parse(birthYear.value), dayOfYear);
+    } 
+    else {
+      Get.snackbar('Error', 'Invalid NIC format', snackPosition: SnackPosition.BOTTOM);
+      return;
     }
+
+    DateTime birth = DateFormat('yyyy-MM-dd').parse(birthDate.value);
+    weekDay.value = DateFormat('EEEE').format(birth);
+    age.value = (DateTime.now().year - birth.year).toString();
+
+    Get.to(() => NICResultScreen());
+  }
+
+  String getDateFromDayOfYear(int year, int day) {
+    DateTime date = DateTime(year).add(Duration(days: day - 1));
+    return DateFormat('yyyy-MM-dd').format(date);
   }
 }
