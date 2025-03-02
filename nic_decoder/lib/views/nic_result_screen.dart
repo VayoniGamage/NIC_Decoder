@@ -31,6 +31,7 @@ class NICResultScreen extends StatelessWidget {
             _infoTile("3.) Date of Birth (Day):", controller.birthDay),
             _infoTile("4.) Age:", controller.age),
             _infoTile("5.) Gender:", controller.gender),
+            _infoTile("6.) Voting Eligibility:", controller.votingEligibility), // Updated voting eligibility
 
             const SizedBox(height: 20),
             ElevatedButton(
