@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import '../controllers/nic_controller.dart';
 
 class NICResultScreen extends StatelessWidget {
+  const NICResultScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final NICController controller = Get.find<NICController>();
@@ -33,6 +35,12 @@ class NICResultScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => Get.back(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFE7C582), // Updated Button Color
+                foregroundColor: Colors.black, // Text Color for Better Contrast
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               child: const Text("Decode Another"),
             ),
           ],
