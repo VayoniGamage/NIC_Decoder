@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../views/nic_result_screen.dart';
 
 class NICController extends GetxController {
   var nicNumber = ''.obs;
@@ -10,59 +11,65 @@ class NICController extends GetxController {
   var gender = ''.obs;
   var isValidNIC = false.obs;
 
-  get nicInputController => null;
-
   void decodeNIC(String nic) {
-    nicNumber.value = nic.trim();
-    
-    // Check if it's 9-digit old NIC or 12-digit new NIC
+    nic = nic.trim();
+    if (nic.isEmpty) {
+      Get.snackbar("Error", "NIC number cannot be empty",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Get.theme.colorScheme.error);
+      isValidNIC.value = false;
+      return;
+    }
+
     if (nic.length == 10 && RegExp(r'^\d{9}[VvXx]$').hasMatch(nic)) {
       _decodeOldNIC(nic);
     } else if (nic.length == 12 && RegExp(r'^\d{12}$').hasMatch(nic)) {
       _decodeNewNIC(nic);
     } else {
       isValidNIC.value = false;
+      Get.snackbar("Invalid NIC", "Enter a valid Sri Lankan NIC",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Get.theme.colorScheme.error);
       return;
     }
 
     isValidNIC.value = true;
+    Get.to(NICResultScreen()); // Navigate after decoding
   }
 
   void _decodeOldNIC(String nic) {
-    String yearPrefix = (nic[0] == '0') ? '19' : '19'; // Always 19XX
-    String year = yearPrefix + nic.substring(0, 2);
+    String year = "19${nic.substring(0, 2)}";
     int days = int.parse(nic.substring(2, 5));
-
     _processNICData(year, days);
   }
 
   void _decodeNewNIC(String nic) {
     String year = nic.substring(0, 4);
     int days = int.parse(nic.substring(4, 7));
-
     _processNICData(year, days);
   }
 
   void _processNICData(String year, int days) {
-    // Gender check: if days > 500, it's female (subtract 500)
     String genderText = (days > 500) ? "Female" : "Male";
     if (days > 500) days -= 500;
 
-    // Convert day of the year to actual date
-    DateTime dob = DateTime(int.parse(year), 1, 1).add(Duration(days: days - 1));
+    DateTime dob;
+    try {
+      dob = DateTime(int.parse(year), 1, 1).add(Duration(days: days - 1));
+    } catch (e) {
+      Get.snackbar("Error", "Invalid NIC format",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Get.theme.colorScheme.error);
+      return;
+    }
+
     String formattedDate = DateFormat("yyyy-MM-dd").format(dob);
     String weekDay = DateFormat("EEEE").format(dob);
 
-    // Calculate Age
     int currentYear = DateTime.now().year;
     int userAge = currentYear - int.parse(year);
 
-    // Update Variables
     birthYear.value = year;
     birthDate.value = formattedDate;
     birthDay.value = weekDay;
     gender.value = genderText;
     age.value = userAge.toString();
   }
-  
 }
