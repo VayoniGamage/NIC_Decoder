@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import '../views/nic_result_screen.dart';
 
 class NICController extends GetxController {
@@ -9,6 +10,7 @@ class NICController extends GetxController {
   var birthDay = ''.obs;
   var age = ''.obs;
   var gender = ''.obs;
+  var votingEligibility = ''.obs;
   var isValidNIC = false.obs;
 
   void decodeNIC(String nic) {
@@ -32,19 +34,32 @@ class NICController extends GetxController {
     }
 
     isValidNIC.value = true;
-    Get.to(NICResultScreen()); // Navigate after decoding
+    Get.to(() => const NICResultScreen()); // Navigate after decoding
   }
 
   void _decodeOldNIC(String nic) {
     String year = "19${nic.substring(0, 2)}";
     int days = int.parse(nic.substring(2, 5));
+    String voteChar = nic.substring(9, 10).toUpperCase();
+
     _processNICData(year, days);
+
+    // Voting eligibility for old NIC: 'V' means can vote if age is 18+, 'X' means cannot vote
+    if (int.parse(age.value) >= 18 && voteChar == 'V') {
+      votingEligibility.value = "Eligible to Vote";
+    } else {
+      votingEligibility.value = "Not Eligible to Vote";
+    }
   }
 
   void _decodeNewNIC(String nic) {
     String year = nic.substring(0, 4);
     int days = int.parse(nic.substring(4, 7));
+
     _processNICData(year, days);
+
+    // For new NIC, eligibility is determined solely by age (18+)
+    votingEligibility.value = (int.parse(age.value) >= 18) ? "Eligible to Vote" : "Not Eligible to Vote";
   }
 
   void _processNICData(String year, int days) {
